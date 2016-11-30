@@ -1,6 +1,5 @@
 const ws = require("ws");
 const url = require("url");
-const config = require("./config");
 
 const requestConfig = (webSocket, environment) => {
   webSocket.send(environment);
@@ -11,14 +10,14 @@ const startUpdateConfig = (environment) => {
   let interval;
 
   const connect = () => {
-    const webSocket = new ws(url.resolve(config.get("CONFIG_SERVICE_URL"), environment));
+    const webSocket = new ws(url.resolve(process.env.CONFIG_SERVICE_URL, environment));
 
     webSocket.on("open", () => {
       retryNumOfTimes = 0;
       requestConfig(webSocket, environment);
       interval = setInterval(
         requestConfig,
-        config.get("INTERVAL"),
+        process.env.INTERVAL,
         webSocket,
         environment
       );
@@ -43,5 +42,3 @@ const startUpdateConfig = (environment) => {
 };
 
 module.exports = startUpdateConfig;
-
-//startUpdateConfig("dev");

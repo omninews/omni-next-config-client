@@ -3,17 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "start": "node .",
-    "dev-start": "nf run npm run start -s"
-  },
   "author": "Alex Robsahm",
   "license": "ISC",
-  "devDependencies": {
-    "foreman": "^2.0.0"
-  },
   "dependencies": {
-    "varium": "github:ahultgren/node-varium",
     "ws": "^1.1.1"
   }
 }
