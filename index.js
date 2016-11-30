@@ -10,14 +10,14 @@ const startUpdateConfig = (environment) => {
   let interval;
 
   const connect = () => {
-    const webSocket = new ws(url.resolve(process.env.CONFIG_SERVICE_URL, environment));
+    const webSocket = new ws(url.resolve(process.env.CONFIG_REQUEST_URL, environment));
 
     webSocket.on("open", () => {
       retryNumOfTimes = 0;
       requestConfig(webSocket, environment);
       interval = setInterval(
         requestConfig,
-        process.env.INTERVAL,
+        process.env.CONFIG_REQUEST_INTERVAL,
         webSocket,
         environment
       );
