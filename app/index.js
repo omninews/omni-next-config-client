@@ -4,18 +4,22 @@ import ws from "ws";
 import url from "url";
 import config from "./config";
 
-const updateConfig = (webSocket, environment) => {
+const requestConfig = (webSocket, environment) => {
   webSocket.send(environment);
 };
 
 export const startUpdateConfig = (environment) => {
+  let retryNumOfTimes = 0;
+  let interval;
+
   const connect = () => {
     const webSocket = new ws(url.resolve(config.get("CONFIG_SERVICE_URL"), environment));
 
     webSocket.on("open", () => {
-      updateConfig(webSocket, environment);
-      setInterval(
-        updateConfig,
+      retryNumOfTimes = 0;
+      requestConfig(webSocket, environment);
+      interval = setInterval(
+        requestConfig,
         config.get("INTERVAL"),
         webSocket,
         environment,
@@ -30,12 +34,13 @@ export const startUpdateConfig = (environment) => {
     });
 
     webSocket.on("error", (error) => {
-      console.error("Error:", error);
+      console.error(error);
     });
 
     webSocket.on("close", () => {
-      console.error("Socket closed");
-      setTimeout(connect, 2000);
+      clearInterval(interval);
+      setTimeout(connect, Math.ceil(Math.E ** retryNumOfTimes) * 100);
+      retryNumOfTimes += 1;
     });
   };
 
