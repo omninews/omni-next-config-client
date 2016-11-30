@@ -1,6 +1,10 @@
 const ws = require("ws");
 const url = require("url");
 
+if(!process.env.CONFIG_REQUEST_URL || !process.env.CONFIG_REQUEST_INTERVAL) {
+  console.error("Environment variables CONFIG_REQUEST_URL and CONFIG_REQUEST_INTERVAL must be set");
+}
+
 const requestConfig = (webSocket, environment) => {
   webSocket.send(environment);
 };
