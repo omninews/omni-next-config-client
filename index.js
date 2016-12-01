@@ -5,15 +5,17 @@ if(!process.env.CONFIG_REQUEST_URL || !process.env.CONFIG_REQUEST_INTERVAL) {
   console.error("Environment variables CONFIG_REQUEST_URL and CONFIG_REQUEST_INTERVAL must be set");
 }
 
+let config;
+
 const requestConfig = (webSocket, environment) => {
   webSocket.send(environment);
 };
 
-const startUpdateConfig = (environment) => {
+const initializeConfigUpdate = (environment) => {
   let retryNumOfTimes = 0;
   let interval;
-
-  const connect = () => {
+  
+  const connect = (resolve, reject) => {
     const webSocket = new ws(url.resolve(process.env.CONFIG_REQUEST_URL, environment));
 
     webSocket.on("open", () => {
@@ -28,7 +30,9 @@ const startUpdateConfig = (environment) => {
     });
 
     webSocket.on("message", (message) => {
-      process.env = Object.assign(process.env, JSON.parse(message));
+      console.log("update!");
+      config = JSON.parse(message);
+      resolve(config);
     });
 
     webSocket.on("error", (error) => {
@@ -37,12 +41,23 @@ const startUpdateConfig = (environment) => {
 
     webSocket.on("close", () => {
       clearInterval(interval);
-      setTimeout(connect, Math.ceil(Math.pow(Math.E, retryNumOfTimes)) * 100);
+      setTimeout(connect, Math.ceil(Math.pow(Math.E, retryNumOfTimes)) * 100, resolve, reject);
       retryNumOfTimes += 1;
     });
   };
 
-  connect();
+  return new Promise(connect(resolve, reject));
 };
 
-module.exports = startUpdateConfig;
+const getConfig = () => {
+  if (!config) {
+    console.error("Config update not initialized! Use initializeConfigUpdate()");
+  }
+
+  return config;
+}
+
+module.exports = {
+  initializeConfigUpdate,
+  getConfig
+};
