@@ -7,6 +7,10 @@ Create the following enviroment variables
 
 Initiate config fetching. `environment` is one of "dev", "stage" or "prod"
 ```
-var refreshConfig = require("next-config-client");
-refreshConfig(enviroment);
+var configClient = require("next-config-client");
+configClient.initializeConfigUpdate(enviroment)
+.then((config) => {
+  // Do stuff with config and start app
+});
 ```
+Later use `configClient.getConfig()` to get the latest config
