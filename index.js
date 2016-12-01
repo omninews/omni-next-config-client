@@ -46,7 +46,7 @@ const initializeConfigUpdate = (environment) => {
     });
   };
 
-  return new Promise(connect(resolve, reject));
+  return new Promise((resolve, reject) => connect(resolve, reject));
 };
 
 const getConfig = () => {
