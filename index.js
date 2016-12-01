@@ -30,7 +30,6 @@ const initializeConfigUpdate = (environment) => {
     });
 
     webSocket.on("message", (message) => {
-      console.log("update!");
       config = JSON.parse(message);
       resolve(config);
     });
