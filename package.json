@@ -1,7 +1,7 @@
 {
   "name": "next-config-client",
   "version": "1.0.0",
-  "description": "",
+  "description": "Package for loading and refreshing config from server",
   "main": "index.js",
   "author": "Alex Robsahm",
   "license": "ISC",
