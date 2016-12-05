@@ -1,12 +1,13 @@
 const ws = require("ws");
 const url = require("url");
 
+let config = {};
+
 const requestConfig = (webSocket, environment) => {
   webSocket.send(environment);
 };
 
 const initializeConfigUpdate = (conf) => {
-  let config = {}
   let retryNumOfTimes = 0;
   let intervalRef;
   
