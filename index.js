@@ -19,11 +19,12 @@ const initializeConfigUpdate = (conf) => {
     });
 
     webSocket.on("message", (message) => {
-      if (message.initialConfig) {
-        Object.assign(config, JSON.parse(message.initialConfig));
+      const data = JSON.parse(message);
+      if (data.initialConfig) {
+        Object.assign(config, JSON.parse(data.initialConfig));
         resolve(config);
-      } else if (message.environment === environment) {
-        Object.assign(config, JSON.parse(message.config));
+      } else if (data.environment === conf.environment) {
+        Object.assign(config, JSON.parse(data.config));
       }
     });
 
