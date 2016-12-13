@@ -9,7 +9,6 @@ const requestConfig = (webSocket, environment) => {
 
 const initializeConfigUpdate = (conf) => {
   let retryNumOfTimes = 0;
-  let intervalRef;
   
   const connect = (resolve, reject) => {
     const webSocket = new ws(url.resolve(conf.requestUrl, conf.environment));
@@ -17,21 +16,15 @@ const initializeConfigUpdate = (conf) => {
     webSocket.on("open", () => {
       retryNumOfTimes = 0;
       requestConfig(webSocket, conf.environment);
-      intervalRef = setInterval(
-        requestConfig,
-        conf.interval,
-        webSocket,
-        conf.environment
-      );
-    });
-
-    webSocket.once("message", (message) => {
-      Object.assign(config, JSON.parse(message));
-      resolve(config);
     });
 
     webSocket.on("message", (message) => {
-      Object.assign(config, JSON.parse(message));
+      if (message.initialConfig) {
+        Object.assign(config, JSON.parse(message.initialConfig));
+        resolve(config);
+      } else if (message.environment === environment) {
+        Object.assign(config, JSON.parse(message.config));
+      }
     });
 
     webSocket.on("error", (error) => {
@@ -39,7 +32,6 @@ const initializeConfigUpdate = (conf) => {
     });
 
     webSocket.on("close", () => {
-      clearInterval(intervalRef);
       setTimeout(connect, Math.ceil(Math.pow(Math.E, retryNumOfTimes)) * 100, resolve, reject);
       retryNumOfTimes += 1;
     });

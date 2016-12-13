@@ -6,8 +6,7 @@ Initiate config fetching. `environment` is one of "dev", "stage" or "prod"
 var configClient = require("next-config-client");
 configClient({
   requestUrl: "ws://example.com/api/vx/config/",
-  environment: "dev",
-  interval: time in milliseconds
+  environment: "dev"
 })
 .then((config) => {
   // Do stuff with config and start app
