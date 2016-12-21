@@ -8,6 +8,7 @@ const requestConfig = (webSocket, environment) => {
 };
 
 const initializeConfigUpdate = (conf) => {
+  let ping;
   let retryNumOfTimes = 0;
   
   const connect = (resolve, reject) => {
@@ -16,6 +17,7 @@ const initializeConfigUpdate = (conf) => {
     webSocket.on("open", () => {
       retryNumOfTimes = 0;
       requestConfig(webSocket, conf.environment);
+      ping = setInterval(ws.ping(), 15000);
     });
 
     webSocket.on("message", (message) => {
@@ -33,6 +35,7 @@ const initializeConfigUpdate = (conf) => {
     });
 
     webSocket.on("close", () => {
+      clearInterval(ping);
       setTimeout(connect, Math.ceil(Math.pow(Math.E, retryNumOfTimes)) * 100, resolve, reject);
       retryNumOfTimes += 1;
     });
