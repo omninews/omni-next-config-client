@@ -17,7 +17,9 @@ const initializeConfigUpdate = (conf) => {
     webSocket.on("open", () => {
       retryNumOfTimes = 0;
       requestConfig(webSocket, conf.environment);
-      ping = setInterval(webSocket.ping, 15000);
+      ping = setInterval(() => {
+        webSocket.ping();
+      }, 15000);
     });
 
     webSocket.on("message", (message) => {
