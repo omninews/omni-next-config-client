@@ -1,11 +1,8 @@
 const ws = require("ws");
+const R = require("ramda");
 const url = require("url");
 
 let config = {};
-
-const requestConfig = (webSocket, environment) => {
-  webSocket.send(environment);
-};
 
 const initializeConfigUpdate = (conf) => {
   let ping;
@@ -16,7 +13,7 @@ const initializeConfigUpdate = (conf) => {
 
     webSocket.on("open", () => {
       retryNumOfTimes = 0;
-      requestConfig(webSocket, conf.environment);
+      webSocket.send(conf.environment);
       ping = setInterval(() => {
         webSocket.ping();
       }, 15000);
@@ -46,7 +43,16 @@ const initializeConfigUpdate = (conf) => {
   return new Promise(connect);
 };
 
+const getConfig = ([part, key], def) => {
+  const confValue = R.path(part + '.' + key, config)
+  if (confValue !== undefined) {
+    return confValue;
+  }
+
+  return def;
+};
+
 module.exports = {
   initializeConfigUpdate,
-  config,
+  getConfig
 };
