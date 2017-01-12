@@ -49,7 +49,11 @@ const getConfig = ([part, key], def) => {
     return confValue;
   }
 
-  return def;
+  if (def) {
+    return def;
+  }
+
+  return undefined;
 };
 
 module.exports = {
