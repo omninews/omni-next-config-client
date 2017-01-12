@@ -6,6 +6,7 @@
   "author": "Alex Robsahm",
   "license": "ISC",
   "dependencies": {
+    "ramda": "^0.23.0",
     "ws": "^1.1.1"
   }
 }
