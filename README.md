@@ -4,7 +4,7 @@
 Initiate config fetching. `environment` is one of "dev", "stage" or "prod"
 ```
 var configClient = require("next-config-client");
-configClient({
+configClient.initializeConfigUpdate({
   requestUrl: "ws://example.com/api/vx/config/",
   environment: "dev"
 })
@@ -12,4 +12,4 @@ configClient({
   // Do stuff with config and start app
 });
 ```
-After that use `configClient.config` to get the latest config
+After that use `configClient.getConfig(["part", "key"], defaultValue)` to get the config value you need.

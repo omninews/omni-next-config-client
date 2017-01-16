@@ -43,8 +43,8 @@ const initializeConfigUpdate = (conf) => {
   return new Promise(connect);
 };
 
-const getConfig = ([part, key], def) => {
-  const confValue = R.path(part + '.' + key, config)
+const getConfig = (path, def) => {
+  const confValue = R.path(path, config);
   if (confValue !== undefined) {
     return confValue;
   }
