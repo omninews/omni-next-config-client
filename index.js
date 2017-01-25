@@ -1,3 +1,5 @@
+"use strict";
+
 const ws = require("ws");
 const R = require("ramda");
 const url = require("url");
