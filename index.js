@@ -33,6 +33,7 @@ const initializeConfigUpdate = (conf) => {
 
     webSocket.on("error", (error) => {
       console.error(error);
+      reject(error);
     });
 
     webSocket.on("close", () => {
