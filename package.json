@@ -5,8 +5,12 @@
   "main": "index.js",
   "author": "Alex Robsahm",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/omninews/omni-next-config-client.git"
+  },
   "dependencies": {
     "ramda": "^0.23.0",
-    "ws": "^1.1.1"
+    "ws": ">=3.3.1"
   }
 }
